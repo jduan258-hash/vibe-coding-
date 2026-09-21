@@ -32,6 +32,8 @@ async function downloadAssets(items, folder) {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         const id = await chrome.downloads.download({ url: item.url, filename, conflictAction: 'uniquify', saveAs: false });
+        const state = await waitForDownload(id, 60000);
+        if (state !== 'complete') throw new Error(`Download ${state || 'timeout'}`);
         results.push({ id, url: item.url, ok: true });
         lastError = '';
         break;
@@ -43,4 +45,22 @@ async function downloadAssets(items, folder) {
     if (lastError) results.push({ url: item.url, ok: false, error: lastError });
   }
   return { results };
+}
+
+function waitForDownload(id, timeoutMs) {
+  return new Promise(resolve => {
+    let settled = false;
+    const finish = state => { if (settled) return; settled = true; clearTimeout(timer); chrome.downloads.onChanged.removeListener(listener); resolve(state); };
+    const listener = delta => {
+      if (delta.id !== id) return;
+      if (delta.state?.current === 'complete') finish('complete');
+      if (delta.state?.current === 'interrupted') finish('interrupted');
+    };
+    const timer = setTimeout(() => finish('timeout'), timeoutMs);
+    chrome.downloads.onChanged.addListener(listener);
+    chrome.downloads.search({ id }).then(rows => {
+      const state = rows[0]?.state;
+      if (state === 'complete' || state === 'interrupted') finish(state);
+    });
+  });
 }
