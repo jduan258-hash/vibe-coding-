@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Page Asset Grabber",
+  "version": "1.0.0",
+  "description": "Scan the current page for JPG, PNG and GIF assets and download them in bulk.",
+  "permissions": ["downloads", "scripting", "tabs", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "action": { "default_title": "Page Asset Grabber", "default_popup": "popup.html" },
+  "background": { "service_worker": "background.js", "type": "module" },
+  "commands": { "scan-page": { "suggested_key": { "default": "Ctrl+Shift+Y" }, "description": "Scan the current page" } }
+}
