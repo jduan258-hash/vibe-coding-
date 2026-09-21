@@ -1,0 +1,6 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page Asset Grabber</title><link rel="stylesheet" href="popup.css"></head><body><main>
+<header><div><h1>Page Asset Grabber</h1><p id="site">Scanning current page…</p></div><button id="rescan" title="Scan again">↻</button></header>
+<section class="toolbar"><span id="count">0 assets</span><button id="selectAll">Select all</button><button id="clearAll">Clear</button></section>
+<section class="filters"><label>Format <select id="format"><option value="all">All</option><option value="jpg">JPG / JPEG</option><option value="png">PNG</option><option value="gif">GIF</option></select></label><label>Minimum size <select id="minSize"><option value="0">Any</option><option value="10000">100×100</option><option value="50000">500×500</option></select></label></section>
+<div id="status" class="status">Starting scan…</div><section id="grid" class="grid"></section><footer><button id="download" class="primary" disabled>Download selected</button><span id="progress"></span></footer>
+</main><script type="module" src="popup.js"></script></body></html>
